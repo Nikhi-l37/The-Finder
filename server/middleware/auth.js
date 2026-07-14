@@ -8,16 +8,16 @@ module.exports = function(req, res, next) {
     return res.status(401).json({ msg: 'No token, authorization denied' });
   }
 
-  // 3. Verify the token
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // FIXED: Use ENV variable
+//   // 3. Verify the token
+//   try {
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET); // FIXED: Use ENV variable
     
-    // 4. Add the seller's ID from the token to the request object
-    req.sellerId = decoded.sellerId;
+//     // 4. Add the seller's ID from the token to the request object
+//     req.sellerId = decoded.sellerId;
     
-    // 5. Call 'next()' to move on to the actual route
-    next();
-  } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
-  }
-};
+//     // 5. Call 'next()' to move on to the actual route
+//     next();
+//   } catch (err) {
+//     res.status(401).json({ msg: 'Token is not valid' });
+//   }
+// };
