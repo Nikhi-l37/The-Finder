@@ -107,6 +107,8 @@ router.post('/login', loginLimiter, validateLogin, async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials.' });
     }
 
+    // --- OTP LOGIC COMMENTED OUT FOR NOW ---
+    /*
     // 4. Generate OTP and hash it
     const otp = generateOTP();
     const otpHash = await hashOTP(otp);
@@ -143,6 +145,14 @@ router.post('/login', loginLimiter, validateLogin, async (req, res) => {
       challengeId,
       expiresIn: 300, // 5 minutes in seconds
     });
+    */
+
+    // --- TEMPORARY LOGIN BYPASS WITHOUT OTP ---
+    const token = jwt.sign(
+      { sellerId: seller.id },
+      process.env.JWT_SECRET
+    );
+    res.json({ token });
 
   } catch (err) {
     console.error('[AUTH] Login error:', err.message);

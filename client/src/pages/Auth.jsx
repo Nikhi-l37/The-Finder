@@ -94,6 +94,7 @@ function Auth() {
                 // LOGIN: POST /api/sellers/login
                 const response = await api.post('/api/sellers/login', payload);
                 
+                /*
                 if (response.data.otpRequired) {
                     // OTP required - move to Step 2
                     setChallengeId(response.data.challengeId);
@@ -107,10 +108,15 @@ function Auth() {
                         setError(`⚠️ ${response.data.warning}`);
                     }
                 }
+                */
+                // Bypass OTP directly to dashboard
+                localStorage.setItem('token', response.data.token);
+                navigate('/dashboard');
             } else {
                 // REGISTER: POST /api/sellers/register
-                await api.post('/api/sellers/register', payload);
+                const registerResponse = await api.post('/api/sellers/register', payload);
                 
+                /*
                 // Auto login after register to trigger OTP
                 const loginResponse = await api.post('/api/sellers/login', payload);
                 
@@ -122,6 +128,10 @@ function Auth() {
                     setRemainingTime(loginResponse.data.expiresIn);
                     setOtp('');
                 }
+                */
+                // Bypass OTP directly to dashboard
+                localStorage.setItem('token', registerResponse.data.token);
+                navigate('/dashboard');
             }
         } catch (err) {
             console.error('Auth failed:', err.response?.data);
