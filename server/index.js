@@ -68,8 +68,12 @@ app.use(errorHandler);
 
 // === START SERVER ===
 async function startServer() {
-  // Check database connection before starting server
-  await initializeDatabase();
+  // Try DB connection but don't crash if it fails
+  try {
+    await initializeDatabase();
+  } catch (err) {
+    console.error('Database initialization failed, server will still start:', err.message);
+  }
 
   app.listen(port, host, () => {
     console.log(`Server is running successfully on http://localhost:${port}`);

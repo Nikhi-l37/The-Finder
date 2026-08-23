@@ -10,6 +10,8 @@ COPY . .
 
 RUN mkdir -p uploads
 
+ENV NODE_OPTIONS=--dns-result-order=ipv4first
+
 EXPOSE 3001
 
-CMD ["node", "index.js"]
+CMD ["node", "--dns-result-order=ipv4first", "index.js"]
