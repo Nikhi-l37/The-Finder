@@ -1,0 +1,25 @@
+services:
+  server:
+    build:
+      context: ./server
+    container_name: finder-server
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    volumes:
+      - uploads:/app/uploads
+    ports:
+      - "3001:3001"
+
+  client:
+    build:
+      context: ./client
+    container_name: finder-client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+
+volumes:
+  uploads:
