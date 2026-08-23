@@ -11,7 +11,7 @@ COPY . .
 
 RUN npm run build
 
-# Stage 2: Serve with node
+# Stage 2: Serve
 FROM node:20-alpine
 
 RUN npm install -g serve
@@ -19,6 +19,8 @@ RUN npm install -g serve
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
+
+RUN echo '{"name":"client","version":"1.0.0","scripts":{"start":"serve -s dist -l 80"}}' > package.json
 
 EXPOSE 80
 
