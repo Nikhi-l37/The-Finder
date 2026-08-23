@@ -1,7 +1,8 @@
-// nikhi-l37/local-inventory-project/local-inventory-project-311337e0354f330c870cbcf8e0b43f1dfb388258/server/db.js
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
+
 const { Pool } = require('pg');
 
-// 2. Load our environment variables from .env
 require('dotenv').config();
 
 // Determine if we're connecting to Supabase
