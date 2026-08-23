@@ -10,7 +10,6 @@ const cors = require('cors'); // Import cors
 const pool = require('./db'); // Import our db connection
 const { initializeDatabase, checkDatabaseHealth } = require('./dbHealthCheck');
 const { errorHandler } = require('./middleware/errorHandler');
-const { verifySMTPConfig } = require('./utils/mail'); // Verify SMTP config
 
 const app = express();
 const port = process.env.PORT || 3001; // Use Render's PORT or default to 3001
@@ -71,9 +70,6 @@ app.use(errorHandler);
 async function startServer() {
   // Check database connection before starting server
   await initializeDatabase();
-
-  // Verify SMTP configuration for OTP email feature
-  await verifySMTPConfig();
 
   app.listen(port, host, () => {
     console.log(`Server is running successfully on http://localhost:${port}`);
