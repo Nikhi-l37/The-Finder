@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-// 1. Create a new axios instance
+// Use the same-origin backend API path.
+// If the backend is served separately, set VITE_API_BASE_URL to that URL instead.
 const api = axios.create({
-  // FIXED: Using environment variable with localhost fallback for better reliability
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || '',
 });
 
 // 2. Add an "interceptor" to automatically add the token to headers
