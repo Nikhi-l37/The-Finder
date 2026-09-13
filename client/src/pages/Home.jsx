@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
-import api from '../api';
+import api, { getImageUrl } from '../api';
 import axios from 'axios';
 import styles from './Home.module.css';
 
@@ -229,6 +229,11 @@ function Home() {
         response = await api.get('/api/search/shops', { params });
       }
       
+      // If server returned an HTML page (e.g. static server fallback / missing API proxy)
+      if (typeof response.data === 'string' && response.data.trim().startsWith('<')) {
+        throw new Error('API returned HTML instead of JSON. Check your backend server URL or proxy configuration.');
+      }
+
       // Ensure response.data is an array
       const results = Array.isArray(response.data) ? response.data : [];
       setSearchResults(results);
@@ -240,20 +245,22 @@ function Home() {
         setSearchPanelOpen(false);
 
         // Auto-fit map to show all results
-        const lats = results.map(item => item.latitude);
-        const lons = results.map(item => item.longitude);
-        const minLat = Math.min(...lats);
-        const maxLat = Math.max(...lats);
-        const minLon = Math.min(...lons);
-        const maxLon = Math.max(...lons);
+        const validCoords = results.filter(item => typeof item.latitude === 'number' && typeof item.longitude === 'number');
+        if (validCoords.length > 0) {
+          const lats = validCoords.map(item => item.latitude);
+          const lons = validCoords.map(item => item.longitude);
+          const minLat = Math.min(...lats);
+          const maxLat = Math.max(...lats);
+          const minLon = Math.min(...lons);
+          const maxLon = Math.max(...lons);
 
-        // If only 1 result, just set bounds to small area or rely on center button interaction?
-        // Actually fitBounds works fine even for one point if maxZoom is set.
-        setMapBounds([[minLat, minLon], [maxLat, maxLon]]);
+          setMapBounds([[minLat, minLon], [maxLat, maxLon]]);
+        }
       }
     } catch (err) {
       console.error('Error searching:', err);
-      alert('Failed to perform search. Please try again.');
+      setSearchResults([]);
+      alert(err.message || 'Failed to perform search. Please try again.');
     }
   };
 
@@ -295,7 +302,7 @@ function Home() {
                 <div className={styles.popupContent}>
                   {imageUrl && (
                     <img
-                      src={`${import.meta.env.VITE_API_BASE_URL}${imageUrl}`}
+                      src={getImageUrl(imageUrl)}
                       alt="Shop"
                       className={styles.popupImage}
                     />
@@ -447,7 +454,7 @@ function Home() {
                 >
                   <div className={styles.cardHeader}>
                     {imageUrl ? (
-                      <img src={`${import.meta.env.VITE_API_BASE_URL}${imageUrl}`} alt="shop" className={styles.cardImage} />
+                      <img src={getImageUrl(imageUrl)} alt="shop" className={styles.cardImage} />
                     ) : <div className={styles.cardPlaceholder}></div>}
                     <div className={styles.cardInfo}>
                       <h4>{result.shop_name || result.name}</h4>

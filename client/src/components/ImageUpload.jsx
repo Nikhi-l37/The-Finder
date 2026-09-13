@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getImageUrl } from '../api';
 import styles from './ImageUpload.module.css';
 
 const ImageUpload = ({ label, currentImage, onImageSelect }) => {
@@ -7,7 +8,7 @@ const ImageUpload = ({ label, currentImage, onImageSelect }) => {
     // If the parent updates the currentImage (e.g. after fetch), update preview
     useEffect(() => {
         if (currentImage) {
-            setPreview(currentImage.startsWith('http') ? currentImage : `${import.meta.env.VITE_API_BASE_URL}${currentImage}`);
+            setPreview(getImageUrl(currentImage));
         }
     }, [currentImage]);
 

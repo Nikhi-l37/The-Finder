@@ -1,9 +1,16 @@
 import axios from 'axios';
 
-// Use the same-origin backend API path.
-// If the backend is served separately, set VITE_API_BASE_URL to that URL instead.
+// Use configured backend base URL or fallback to empty string (same origin)
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '';
+
+export const getImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '',
+  baseURL: API_BASE_URL,
 });
 
 // 2. Add an "interceptor" to automatically add the token to headers

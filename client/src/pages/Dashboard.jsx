@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import api from '../api';
+import api, { getImageUrl } from '../api';
 import ShopCreator from '../components/ShopCreator.jsx';
 import ShopStatus from '../components/ShopStatus.jsx';
 import ProductManager from '../components/ProductManager.jsx';
@@ -127,7 +127,7 @@ function SellerProfile({ initialShop, onShopUpdated }) {
       <div className={styles.profileHeader}>
         <div className={styles.profileImageContainer}>
           {initialShop.image_url ? (
-            <img src={`${import.meta.env.VITE_API_BASE_URL}${initialShop.image_url}`} alt="Shop Logo" className={styles.avatar} />
+            <img src={getImageUrl(initialShop.image_url)} alt="Shop Logo" className={styles.avatar} />
           ) : <div className={styles.placeholderAvatar}>{initialShop.name[0]}</div>}
           {/* Edit Overlay */}
           <button onClick={() => setIsEditing(true)} className={styles.editIconBtn} title="Edit Profile">✏️</button>
