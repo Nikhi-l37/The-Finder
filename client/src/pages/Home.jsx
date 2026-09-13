@@ -88,7 +88,7 @@ function ProductListModal({ shop, onClose }) {
         <h4>Products ({products.length})</h4>
         {loading ? <p>Loading products...</p> : (
           <div className={styles.modalProductList}>
-            {products.length > 0 ? (
+            {Array.isArray(products) && products.length > 0 ? (
               products.map((product) => (
                 <div key={product.id} className={styles.modalProductItem}>
                   {/* Product Image removed */}
@@ -282,7 +282,7 @@ function Home() {
           attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {searchResults.map(result => {
+        {Array.isArray(searchResults) && searchResults.map(result => {
           const status = getShopStatus(result.opening_time, result.closing_time, result.is_open);
           const imageUrl = result.shop_image || result.image_url;
 
@@ -345,7 +345,7 @@ function Home() {
             />
             {locationSuggestions.length > 0 && (
               <ul className={styles.suggestionsList}>
-                {locationSuggestions.map(s => (
+                {Array.isArray(locationSuggestions) && locationSuggestions.map(s => (
                   <li key={s.id} onClick={() => handleSuggestionClick(s)} className={styles.suggestionItem}>
                     {s.name}{s.admin1 ? `, ${s.admin1}` : ''}{s.country_code ? `, ${s.country_code}` : ''}
                   </li>
@@ -426,7 +426,7 @@ function Home() {
       )}
 
       {/* --- State 3: Results Panel (Right) - Only when search is closed & results exist --- */}
-      {!searchPanelOpen && searchResults.length > 0 && (
+      {!searchPanelOpen && Array.isArray(searchResults) && searchResults.length > 0 && (
         <div className={styles.resultsPanel}>
           <div className={styles.resultsHeader}>
             <h3>Results ({searchResults.length})</h3>
