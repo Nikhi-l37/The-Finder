@@ -7,5 +7,15 @@ export default defineConfig({
   server: {
     port: 3081,
     strictPort: true, // fail instead of switching to another port
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/uploads': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
 })
