@@ -228,16 +228,20 @@ function Home() {
       } else {
         response = await api.get('/api/search/shops', { params });
       }
-      setSearchResults(response.data);
-      if (response.data.length === 0) {
+      
+      // Ensure response.data is an array
+      const results = Array.isArray(response.data) ? response.data : [];
+      setSearchResults(results);
+      
+      if (results.length === 0) {
         alert('No results found for your search.');
       } else {
         // SUCCESS: Auto-close search panel
         setSearchPanelOpen(false);
 
         // Auto-fit map to show all results
-        const lats = response.data.map(item => item.latitude);
-        const lons = response.data.map(item => item.longitude);
+        const lats = results.map(item => item.latitude);
+        const lons = results.map(item => item.longitude);
         const minLat = Math.min(...lats);
         const maxLat = Math.max(...lats);
         const minLon = Math.min(...lons);
