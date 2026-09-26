@@ -16,7 +16,8 @@ const port = process.env.PORT || 3001; // Use Render's PORT or default to 3001
 const host = '0.0.0.0';
 
 // === MIDDLEWARE ===
-app.use(cors()); // Allow requests (Cross-Origin)
+app.use(cors({ origin: '*' }));
+// Allow requests (Cross-Origin)
 app.use(express.json()); // Allow our server to read JSON body data
 
 // Use 'uploads' directory for static files (images)
